@@ -1,0 +1,141 @@
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.brown,
+          title: Text("Url Launcher"),
+          centerTitle: true,
+        ),
+        body: MyWidget(),
+      ),
+    );
+  }
+}
+
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
+
+  @override
+  State<MyWidget> createState() => _MyWidgetState();
+}
+
+final Uri _url = Uri.parse('https://akashtechnolabs.com');
+final Uri _face = Uri.parse("https://facebook.com");
+
+class _MyWidgetState extends State<MyWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 150),
+      child: Center(
+        child: Column(children: [
+          ElevatedButton.icon(
+            style: TextButton.styleFrom(backgroundColor: Colors.brown),
+            onPressed: () {
+              _makePhoneCall("9978621654");
+            },
+            icon: Icon(
+              Icons.phone,
+              size: 24,
+            ),
+            label: Text("9978621654"),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          ElevatedButton.icon(
+              style: TextButton.styleFrom(backgroundColor: Colors.brown),
+              onPressed: () {
+                _makeEmail("Info@akashtechnolab.com");
+              },
+              icon: Icon(
+                Icons.mail,
+                size: 24,
+              ),
+              label: Text("Info@akashtechnolab.com")),
+          SizedBox(
+            height: 20,
+          ),
+          ElevatedButton.icon(
+            style: TextButton.styleFrom(backgroundColor: Colors.brown),
+            onPressed: () {
+              _launchUrl();
+            },
+            icon: Icon(Icons.web),
+            label: Text("WebSite"),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          ElevatedButton.icon(
+            style: TextButton.styleFrom(backgroundColor: Colors.brown),
+            onPressed: () {
+              _Sms("9978621654");
+            },
+            icon: Icon(Icons.sms),
+            label: Text("SMS"),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          ElevatedButton.icon(
+            style: TextButton.styleFrom(backgroundColor: Colors.brown),
+            onPressed: () {
+              _Facebook();
+            },
+            icon: Icon(Icons.facebook),
+            label: Text("FaceBook"),
+          ),
+        ]),
+      ),
+    );
+  }
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
+
+  Future<void> _makeEmail(String Email) async {
+    final Uri launchUri = Uri(
+      scheme: 'mailto',
+      path: Email,
+    );
+    await launchUrl(launchUri);
+  }
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
+  }
+
+  Future<void> _Sms(String Email) async {
+    final Uri launchUri = Uri(
+      scheme: 'sms',
+      path: Email,
+    );
+    await launchUrl(launchUri);
+  }
+
+  Future<void> _Facebook() async {
+    if (!await launchUrl(_face)) {
+      throw 'Could not launch $_face';
+    }
+  }
+}
